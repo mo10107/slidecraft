@@ -1,0 +1,54 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: presentation_ai
+      POSTGRES_USER: presentation_ai
+      POSTGRES_PASSWORD: presentation_ai
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U presentation_ai -d presentation_ai"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  db-push:
+    build:
+      context: .
+      target: builder
+    command: pnpm db:push
+    environment:
+      DATABASE_URL: postgresql://presentation_ai:presentation_ai@postgres:5432/presentation_ai?schema=public
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-presentation-ai-local-development-secret-change-me}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      GEMINI_KEY: ${GEMINI_KEY:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3-flash-preview}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  app:
+    build:
+      context: .
+      target: runner
+    environment:
+      DATABASE_URL: postgresql://presentation_ai:presentation_ai@postgres:5432/presentation_ai?schema=public
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-presentation-ai-local-development-secret-change-me}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      GEMINI_KEY: ${GEMINI_KEY:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3-flash-preview}
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      db-push:
+        condition: service_completed_successfully
+
+volumes:
+  postgres-data:
