@@ -5,23 +5,8 @@ import { usePresentationState } from "@/states/presentation-state";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect } from "react";
 
-/**
- * Strip base64 data URLs from slide root images before persisting.
- * The data URL can be several MB; we only need the reference URL
- * (which is the same value once stored in the DB).
- * Any slide whose rootImage.url is a data URL gets it cleared so
- * the editor re-renders it from the DB-backed record.
- */
 function slidesForPersistence(slides: PlateSlide[]): PlateSlide[] {
-  return slides.map((slide) => {
-    if (slide.rootImage?.url?.startsWith("data:")) {
-      return {
-        ...slide,
-        rootImage: { ...slide.rootImage, url: "" },
-      };
-    }
-    return slide;
-  });
+  return slides;
 }
 
 interface UseDebouncedSaveOptions {

@@ -34,7 +34,7 @@ export function getPresentingClasses(
   formatCategory?: PlateSlide["formatCategory"],
 ): string {
   if (!isPresenting) {
-    return "min-h-[500px] h-full overflow-clip border border-(--presentation-accent)";
+    return "h-full overflow-hidden border border-(--presentation-accent)";
   }
 
   // For social format, don't force w-full so the aspect ratio is preserved
@@ -66,9 +66,18 @@ export function getSlideFormatStyles(
   );
 
   const heightConfig = calculateHeightFromRatio(baseWidth, aspect);
+  const shouldUseDefaultPresentationRatio =
+    formatCategory === "presentation" && aspect.type === "fluid";
+  const defaultPresentationHeight = Math.round(baseWidth * (9 / 16));
 
   return {
     ...(aspect.type !== "fluid" ? { width: `${baseWidth}px` } : {}),
+    ...(shouldUseDefaultPresentationRatio
+      ? {
+          height: `${defaultPresentationHeight}px`,
+          minHeight: `${defaultPresentationHeight}px`,
+        }
+      : {}),
     ...(heightConfig.minHeightCSS
       ? { minHeight: heightConfig.minHeightCSS }
       : {}),

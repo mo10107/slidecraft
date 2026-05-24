@@ -6,16 +6,18 @@ import { auth } from "@/server/auth";
 import { db } from "@/server/db";
 
 const DEFAULT_SLIDE_IMAGE_MODEL = "gemini-3.1-flash-image-preview";
+type GeminiImageAspectRatio = "1:1" | "3:4" | "4:3" | "9:16" | "16:9";
 
 export async function generateSlideImageAction(
   prompt: string,
   imageModel: string = DEFAULT_SLIDE_IMAGE_MODEL,
+  aspectRatio: GeminiImageAspectRatio = "16:9",
 ) {
   const session = await auth();
   const userId = session?.user?.id ?? "local-dev-user";
 
   try {
-    return await generateGeminiSlideImage(prompt, imageModel, userId);
+    return await generateGeminiSlideImage(prompt, imageModel, userId, aspectRatio);
   } catch (error) {
     console.error("Error generating slide image:", error);
     return {
@@ -25,7 +27,12 @@ export async function generateSlideImageAction(
   }
 }
 
-async function generateGeminiSlideImage(prompt: string, model: string, userId: string) {
+async function generateGeminiSlideImage(
+  prompt: string,
+  model: string,
+  userId: string,
+  aspectRatio: GeminiImageAspectRatio,
+) {
   const geminiApiKey = env.GEMINI_API_KEY ?? env.GEMINI_KEY;
   const geminiConfig = requireOptionalIntegration({
     integration: "Gemini",
@@ -62,7 +69,7 @@ async function generateGeminiSlideImage(prompt: string, model: string, userId: s
         contents: [{ parts: [{ text: prompt }] }],
         generationConfig: {
           responseModalities: ["IMAGE", "TEXT"],
-          imageConfig: { aspectRatio: "16:9" },
+          imageConfig: { aspectRatio },
         },
       }),
     },
@@ -86,6 +93,18 @@ async function generateGeminiSlideImage(prompt: string, model: string, userId: s
   const dataUrl = `data:${mimeType};base64,${imagePart.inlineData.data}`;
 
   try {
+    await db.user.upsert({
+      where: { id: userId },
+      update: { hasAccess: true },
+      create: {
+        id: userId,
+        email: "local-dev@example.com",
+        hasAccess: true,
+        interests: [],
+        name: "Local Dev",
+        role: "ADMIN",
+      },
+    });
     const generatedImage = await db.generatedImage.create({
       data: { url: dataUrl, prompt, userId },
     });

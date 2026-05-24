@@ -256,6 +256,13 @@ Vary layouts throughout for visual interest.
 - detailed: 3-4 sentences per point
 - extensive: 4-5+ sentences per point
 
+**Slide Fit Rules:**
+- Every slide must fit a normal 16:9 presentation canvas without scrolling.
+- Keep headings short: title slides may use one H1 plus one subtitle; content slides should use one H2/H3 heading.
+- For list-like layouts, use at most 3 items per slide, and at most 2 short lines per item.
+- For COMPARE and PROS-CONS layouts, use at most 3 bullets per side, with each bullet under 12 words.
+- Avoid dense paragraphs, nested lists, and multiple complex components on the same slide.
+
 **Content Expansion:** For each outline point, add supporting data, real-world examples, and industry context. Do NOT copy outline verbatim.
 ---
 

@@ -44,11 +44,10 @@ export function EditablePlate({
     maxRootImageHeight,
     presentingRootImageHeight,
     presentingMaxRootImageHeight,
-  } =
-    useRootImageHeight({
-      isPresenting,
-      initialContent,
-    });
+  } = useRootImageHeight({
+    isPresenting,
+    initialContent,
+  });
 
   // Use extracted utility for alignment style
   const alignmentStyle = useMemo(
@@ -75,7 +74,7 @@ export function EditablePlate({
         ref={editorRef}
         className={cn(
           className,
-          "@container/plate-container flex flex-col border-none bg-transparent! py-12 outline-hidden",
+          "@container/plate-container flex min-h-0 flex-col border-none bg-transparent! py-12 outline-hidden",
           "flex-1",
           (readOnly || isGenerating) && "px-16",
           isPresenting && shouldCapRootImage && "self-start",
@@ -96,7 +95,11 @@ export function EditablePlate({
             image={initialContent.rootImage}
             layoutType={initialContent.layoutType}
             slideId={initialContent.id}
-            maxHeightPx={shouldCapRootImage ? maxRootImageHeight : presentingMaxRootImageHeight}
+            maxHeightPx={
+              shouldCapRootImage
+                ? maxRootImageHeight
+                : presentingMaxRootImageHeight
+            }
             heightPx={presentingRootImageHeight}
           />
         )}

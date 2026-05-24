@@ -16,7 +16,7 @@ import { useCallback, useId, useMemo } from "react";
 import { type DragSourceMonitor } from "react-dnd";
 
 export const BASE_WIDTH_PERCENTAGE = "45%";
-export const BASE_HEIGHT = 384;
+export const BASE_HEIGHT = 220;
 
 // Min and max size constraints
 export const MIN_WIDTH_PERCENTAGE = 20; // 20% of parent width
@@ -29,6 +29,12 @@ type UseRootImageActionsOptions = {
   layoutType?: LayoutType | string;
   slideId?: string;
 };
+
+function getDefaultObjectFit(
+  layoutType?: LayoutType | string,
+): ImageCropSettings["objectFit"] {
+  return layoutType === "none" ? "contain" : "cover";
+}
 
 export function useRootImageActions(
   slideId: string,
@@ -49,8 +55,8 @@ export function useRootImageActions(
 
   const size = useMemo(
     () => ({
-    w: image?.size?.w ?? undefined,
-    h: image?.size?.h ?? undefined,
+      w: image?.size?.w ?? undefined,
+      h: image?.size?.h ?? undefined,
     }),
     [image?.size?.h, image?.size?.w],
   );
@@ -72,17 +78,17 @@ export function useRootImageActions(
   const cropSettings: ImageCropSettings = useMemo(
     () =>
       image?.cropSettings || {
-        objectFit: "cover",
+        objectFit: getDefaultObjectFit(layoutType),
         objectPosition: { x: 50, y: 50 },
         zoom: 1,
       },
-    [image?.cropSettings],
+    [image?.cropSettings, layoutType],
   );
 
   // Derived styles
   const imageStyles: React.CSSProperties = useMemo(
     () => ({
-      objectFit: cropSettings.objectFit,
+      objectFit: cropSettings.objectFit ?? getDefaultObjectFit(layoutType),
       objectPosition: `${cropSettings.objectPosition.x}% ${cropSettings.objectPosition.y}%`,
       transform: `scale(${cropSettings.zoom ?? 1})`,
       transformOrigin: `${cropSettings.objectPosition.x}% ${cropSettings.objectPosition.y}%`,

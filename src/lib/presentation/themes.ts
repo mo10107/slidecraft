@@ -1556,6 +1556,25 @@ export const themes: { [key in ThemeName]: ThemeProperties } = {
 
 // ============ CSS Variable Setter ============
 
+/**
+ * Compute a contrasting text color for a given background hex color.
+ * Uses relative luminance (WCAG formula) to decide between dark and light text.
+ */
+function getContrastingTextColor(hexBg: string): string {
+  const hex = hexBg.replace("#", "");
+  const r = parseInt(hex.substring(0, 2), 16) / 255;
+  const g = parseInt(hex.substring(2, 4), 16) / 255;
+  const b = parseInt(hex.substring(4, 6), 16) / 255;
+
+  const toLinear = (c: number) =>
+    c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  const luminance =
+    0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b);
+
+  // Use dark text for light backgrounds, light text for dark backgrounds
+  return luminance > 0.4 ? "#1F2937" : "#F3F4F6";
+}
+
 export function setThemeVariables(
   theme: ThemeProperties,
   element: HTMLElement = document.documentElement,
@@ -1571,6 +1590,10 @@ export function setThemeVariables(
   element.style.setProperty(
     "--presentation-card-background",
     colors.cardBackground,
+  );
+  element.style.setProperty(
+    "--presentation-card-text",
+    getContrastingTextColor(colors.cardBackground),
   );
   element.style.setProperty("--presentation-heading-font", theme.fonts.heading);
   element.style.setProperty("--presentation-body-font", theme.fonts.body);

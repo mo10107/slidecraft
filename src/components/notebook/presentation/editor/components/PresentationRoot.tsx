@@ -60,8 +60,9 @@ export function PresentationRoot({
       id={!isStatic ? `presentation-root-${initialContent?.id}` : undefined}
       className={cn(
         "group/overflow-border flex",
-        "scrollbar-thin p-0 scrollbar-thumb-muted-foreground/20 scrollbar-track-transparent hover:scrollbar-thumb-muted-foreground/30",
+        "p-0",
         "relative",
+        "overflow-hidden",
         "bg-(--presentation-background)",
         "text-(--presentation-text)",
         "focus-within:ring-opacity-50 focus-within:ring-2 focus-within:ring-primary",

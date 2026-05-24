@@ -69,6 +69,7 @@ export const StairItem = (props: PlateElementProps<TStairItemElement>) => {
           className={cn(
             "flex shrink-0 items-center justify-center rounded-md text-2xl font-bold",
           )}
+          data-decor="true"
         >
           {index + 1}
         </div>

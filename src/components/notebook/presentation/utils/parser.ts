@@ -759,6 +759,20 @@ export class SlideParser {
   }
 
   /**
+   * Decode XML/HTML entities in text content
+   */
+  private decodeXmlEntities(text: string): string {
+    return text
+      .replace(/&amp;/g, "&")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&quot;/g, '"')
+      .replace(/&apos;/g, "'")
+      .replace(/&#39;/g, "'")
+      .replace(/&nbsp;/g, " ");
+  }
+
+  /**
    * Enhanced parser that maintains order of text and elements
    */
   private parseElement(xml: string, parentNode: XMLNode): void {
@@ -771,7 +785,9 @@ export class SlideParser {
       if (tagStart === -1) {
         const remainingText = xml.substring(currentIndex);
         if (remainingText) {
-          parentNode.children.push({ text: remainingText });
+          parentNode.children.push({
+            text: this.decodeXmlEntities(remainingText),
+          });
         }
         break;
       }
@@ -780,7 +796,9 @@ export class SlideParser {
       if (tagStart > currentIndex) {
         const textContent = xml.substring(currentIndex, tagStart);
         if (textContent) {
-          parentNode.children.push({ text: textContent });
+          parentNode.children.push({
+            text: this.decodeXmlEntities(textContent),
+          });
         }
       }
 
@@ -790,7 +808,7 @@ export class SlideParser {
       if (tagEnd === -1) {
         const remainingText = xml.substring(tagStart);
         if (remainingText) {
-          parentNode.children.push({ text: remainingText });
+          parentNode.children.push({ text: this.decodeXmlEntities(remainingText) });
         }
         break;
       }
@@ -1122,7 +1140,10 @@ export class SlideParser {
 
   private extractIconValue(node: XMLNode): string {
     const rawValue =
-      node.attributes.icon ?? node.attributes.name ?? node.attributes.query ?? "";
+      node.attributes.icon ??
+      node.attributes.name ??
+      node.attributes.query ??
+      "";
 
     if (!rawValue) return "";
 

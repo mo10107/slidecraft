@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 // Import our new components
 import { updatePresentationTitle } from "@/app/_actions/notebook/presentation/presentationActions";
 import AllweoneText from "@/components/globals/allweone-logo";
+import { ExportButton } from "@/components/presentation/buttons/ExportButton";
 import { PresentButton } from "@/components/presentation/buttons/PresentButton";
 import { ShareButton } from "@/components/presentation/buttons/ShareButton";
 import { PresentationMenu } from "@/components/presentation/controls/PresentationMenu";
@@ -90,10 +91,9 @@ export default function PresentationHeader({ title }: PresentationHeaderProps) {
       {/* Left section with breadcrumb navigation */}
       <div className="flex min-w-0 flex-1 items-center gap-2">
         <Link
-              href="/presentation"
+          href="/presentation"
           className="text-muted-foreground hover:text-foreground"
         >
-          <Brain className="h-5 w-5"></Brain>
         </Link>
         {isPresentationPage && <PresentationMenu readOnly={isReadOnly} />}
         <Input
@@ -144,6 +144,8 @@ export default function PresentationHeader({ title }: PresentationHeaderProps) {
         )}
 
         {/* Export button - Only in presentation page, not outline or present mode */}
+        {isPresentationPage && !isPresenting && <ExportButton />}
+
         {/* Share button - Only in presentation page, not outline */}
         {isPresentationPage && !isPresenting && !isReadOnly && <ShareButton />}
 
@@ -153,7 +155,9 @@ export default function PresentationHeader({ title }: PresentationHeaderProps) {
             variant={activeRightPanel === "agent" ? "default" : "outline"}
             size="sm"
             onClick={() => {
-              setActiveRightPanel(activeRightPanel === "agent" ? null : "agent");
+              setActiveRightPanel(
+                activeRightPanel === "agent" ? null : "agent",
+              );
             }}
             className="gap-2"
           >

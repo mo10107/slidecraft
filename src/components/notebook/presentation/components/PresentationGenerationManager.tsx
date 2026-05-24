@@ -5,6 +5,7 @@ import { getImageFromPixabay } from "@/app/_actions/apps/image-studio/pixabay";
 import { getImageFromUnsplash } from "@/app/_actions/apps/image-studio/unsplash";
 import { updatePresentation } from "@/app/_actions/notebook/presentation/presentationActions";
 import { generateSlideImageAction } from "@/app/_actions/presentation/generate-slide-image";
+import { type LayoutType } from "@/components/notebook/presentation/utils/parser";
 import {
   getMessageText,
   getToolInputArgs,
@@ -60,6 +61,23 @@ interface PresentationOutlineMessageMetadata {
 }
 
 const generationLogger = createLogger("client:presentation-generation");
+
+type GeminiImageAspectRatio = "1:1" | "3:4" | "4:3" | "9:16" | "16:9";
+
+function getImageAspectRatioForLayout(
+  layoutType?: LayoutType,
+  isImageSlide?: boolean,
+): GeminiImageAspectRatio {
+  if (isImageSlide || layoutType === "vertical" || layoutType === "background") {
+    return "16:9";
+  }
+
+  if (layoutType === "left" || layoutType === "right") {
+    return "3:4";
+  }
+
+  return "16:9";
+}
 
 function stripXmlCodeBlock(input: string): string {
   let result = input.trim();
@@ -816,6 +834,10 @@ export function PresentationGenerationManager() {
                   result = await generateImageAction(
                     slide.rootImage!.query,
                     imageModel,
+                    getImageAspectRatioForLayout(
+                      slide.rootImage!.layoutType ?? slide.layoutType,
+                      slide.isImageSlide,
+                    ),
                   );
                 }
               } else {
@@ -823,11 +845,16 @@ export function PresentationGenerationManager() {
                   result = await generateSlideImageAction(
                     slide.rootImage!.query,
                     imageModel,
+                    "16:9",
                   );
                 } else {
                   result = await generateImageAction(
                     slide.rootImage!.query,
                     imageModel,
+                    getImageAspectRatioForLayout(
+                      slide.rootImage!.layoutType ?? slide.layoutType,
+                      slide.isImageSlide,
+                    ),
                   );
                 }
               }

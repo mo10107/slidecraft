@@ -13,9 +13,21 @@ import {
 } from "@/components/ui/select";
 import { Image, Wand2 } from "lucide-react";
 
-export const IMAGE_MODELS: { value: ImageModelList; label: string; group?: string }[] = [
-  { value: "gemini-3.1-flash-image-preview", label: "Nano Banana 2 (Gemini)", group: "gemini" },
-  { value: "gemini-2.5-flash-image", label: "Nano Banana (Gemini)", group: "gemini" },
+export const IMAGE_MODELS: {
+  value: ImageModelList;
+  label: string;
+  group?: string;
+}[] = [
+  {
+    value: "gemini-3.1-flash-image-preview",
+    label: "Nano Banana 2 (Gemini)",
+    group: "gemini",
+  },
+  {
+    value: "gemini-2.5-flash-image",
+    label: "Nano Banana (Gemini)",
+    group: "gemini",
+  },
   { value: "fal-ai/flux-2/flash", label: "Flux 2 Flash", group: "fal" },
   { value: "fal-ai/flux/dev", label: "Flux Dev", group: "fal" },
   { value: "fal-ai/flux-2-pro", label: "Flux 2 Pro", group: "fal" },
@@ -76,23 +88,26 @@ export function ImageSourceSelector({
           <SelectValue placeholder="Select image generation method" />
         </SelectTrigger>
         <SelectContent>
-          <SelectGroup>
+          {/* <SelectGroup>
             <SelectItem value="automatic" className="font-medium">
               Automatic
             </SelectItem>
-          </SelectGroup>
+          </SelectGroup> */}
           <SelectGroup>
             <SelectLabel className="flex items-center gap-1 text-primary/80">
               <Wand2 size={10} />
-              Gemini (Nano Banana)
+              AI Generated
             </SelectLabel>
-            {IMAGE_MODELS.filter((m) => m.group === "gemini").map((model) => (
+            <SelectItem value="gemini-3.1-flash-image-preview">
+              Nano Banana 2
+            </SelectItem>
+            {/* {IMAGE_MODELS.filter((m) => m.group === "gemini").map((model) => (
               <SelectItem key={model.value} value={model.value}>
                 {model.label}
               </SelectItem>
-            ))}
+            ))} */}
           </SelectGroup>
-          <SelectGroup>
+          {/* <SelectGroup>
             <SelectLabel className="flex items-center gap-1 text-primary/80">
               <Wand2 size={10} />
               FAL / Flux
@@ -102,14 +117,14 @@ export function ImageSourceSelector({
                 {model.label}
               </SelectItem>
             ))}
-          </SelectGroup>
+          </SelectGroup> */}
           <SelectGroup>
             <SelectLabel className="flex items-center gap-1 text-primary/80">
               <Image size={10} />
               Stock Images
             </SelectLabel>
-            <SelectItem value="stock-unsplash">Unsplash</SelectItem>
-            <SelectItem value="stock-pixabay">Pixabay</SelectItem>
+            <SelectItem value="stock-unsplash">Image Stock</SelectItem>
+            {/* <SelectItem value="stock-pixabay">Pixabay</SelectItem> */}
           </SelectGroup>
         </SelectContent>
       </Select>

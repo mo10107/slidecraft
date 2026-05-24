@@ -11,6 +11,7 @@
   --presentation-text: #1f2937;
   --presentation-heading: #111827;
   --presentation-muted: #6b7280;
+  --presentation-card-text: #1f2937;
 
   /* Fonts */
   --presentation-heading-font: "Inter", sans-serif;
@@ -29,6 +30,7 @@
   --presentation-text: #e5e7eb;
   --presentation-heading: #f9fafb;
   --presentation-muted: #9ca3af;
+  --presentation-card-text: #1f2937;
 }
 
 /* Fullscreen responsive styles */

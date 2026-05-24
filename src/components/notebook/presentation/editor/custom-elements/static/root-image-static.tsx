@@ -23,13 +23,15 @@ export default function RootImageStatic({
     (s) => s.rootImageGeneration,
   );
   const computedGen = slideId ? rootImageGeneration[slideId] : undefined;
+  const defaultObjectFit =
+    layoutType === "none" ? ("contain" as const) : ("cover" as const);
   const cropSettings = image.cropSettings || {
-    objectFit: "cover" as const,
+    objectFit: defaultObjectFit,
     objectPosition: { x: 50, y: 50 },
   };
 
   const imageStyles: React.CSSProperties = {
-    objectFit: cropSettings.objectFit,
+    objectFit: cropSettings.objectFit ?? defaultObjectFit,
     objectPosition: `${cropSettings.objectPosition.x}% ${cropSettings.objectPosition.y}%`,
     transform: `scale(${cropSettings.zoom ?? 1})`,
     transformOrigin: `${cropSettings.objectPosition.x}% ${cropSettings.objectPosition.y}%`,
@@ -78,9 +80,7 @@ export default function RootImageStatic({
         {computedGen?.status === "generating" ? (
           <div className="flex h-full flex-col items-center justify-center bg-muted/30 p-4">
             <Spinner className="mb-2 h-8 w-8" />
-            <p className="text-sm text-muted-foreground">
-              Generating image...
-            </p>
+            <p className="text-sm text-muted-foreground">Generating image...</p>
           </div>
         ) : image.chartType && image.chartData ? (
           <div className="relative h-full" tabIndex={0}>

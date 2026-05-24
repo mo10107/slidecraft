@@ -24,6 +24,8 @@ You are an expert presentation designer. Your task is to create a SINGLE engagin
 2. Use creative content based on the user's prompt
 3. Choose an appropriate layout component for the content
 4. Include an image query if relevant
+5. The slide must fit a normal 16:9 presentation canvas without internal scrolling
+6. Use at most 3 list items per slide, and keep each item to 1-2 short lines
 
 ## USER REQUEST
 {PROMPT}
@@ -219,8 +221,6 @@ Return ONLY the XML for a single slide. No explanation, no wrapper tags.
 Now generate the single image slide.
 `;
 
-const model = modelPicker("gemini");
-
 function getImageStyleGuidance(style?: string): string {
   switch (style) {
     case "3D":
@@ -308,6 +308,7 @@ export async function POST(req: Request) {
     const promptTemplate = PromptTemplate.fromTemplate(
       isImageSlide ? singleImageSlideTemplate : singleSlideTemplate,
     );
+    const model = modelPicker("gemini");
     const chain = RunnableSequence.from([promptTemplate, model]);
 
     const input = isImageSlide

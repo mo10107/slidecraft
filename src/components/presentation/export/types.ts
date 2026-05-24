@@ -162,6 +162,7 @@ export interface PresentationStyles {
   textColor: string;
   headingColor: string;
   cardBackground: string;
+  cardTextColor: string;
 
   // Fonts
   headingFont: string;

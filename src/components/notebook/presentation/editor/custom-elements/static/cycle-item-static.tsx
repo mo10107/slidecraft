@@ -38,7 +38,7 @@ export function CycleItemStatic(props: SlateElementProps) {
     <div className={cn(gridClass)}>
       <div className={cn("group/cycle-item relative mb-6")}>
         <div
-          className="rounded-md bg-(--presentation-card-background) p-4"
+          className="rounded-md bg-(--presentation-card-background) text-(--presentation-card-text) p-4"
           data-bg-export="true"
         >
           <div className="mb-2 flex items-center">
@@ -59,5 +59,3 @@ export function CycleItemStatic(props: SlateElementProps) {
     </div>
   );
 }
-
-

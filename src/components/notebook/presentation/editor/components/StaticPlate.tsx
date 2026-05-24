@@ -43,7 +43,9 @@ function normalizeStaticContent(content?: PlateSlide["content"]): Value {
     return [] as Value;
   }
 
-  return content.map((node) => normalizeDescendant(node as Descendant)) as Value;
+  return content.map((node) =>
+    normalizeDescendant(node as Descendant),
+  ) as Value;
 }
 
 export function StaticPlate({
@@ -74,7 +76,7 @@ export function StaticPlate({
       <EditorStatic
         className={cn(
           className,
-          "@container/presentation-editor-static flex flex-1 flex-col border-none bg-transparent! p-12 outline-hidden",
+          "@container/presentation-editor-static flex min-h-0 flex-1 flex-col border-none bg-transparent! p-12 outline-hidden",
           initialContent?.alignment === "start" && "justify-start",
           initialContent?.alignment === "center" && "justify-center",
           initialContent?.alignment === "end" && "justify-end",

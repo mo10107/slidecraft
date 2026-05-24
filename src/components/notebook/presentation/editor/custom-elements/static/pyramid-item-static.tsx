@@ -88,6 +88,7 @@ export function PyramidItemStatic(props: SlateElementProps) {
                 "var(--presentation-smart-layout)",
               color: "var(--presentation-background)",
             }}
+            data-decor="true"
           >
             {index + 1}
           </div>
@@ -105,5 +106,3 @@ export function PyramidItemStatic(props: SlateElementProps) {
     </div>
   );
 }
-
-

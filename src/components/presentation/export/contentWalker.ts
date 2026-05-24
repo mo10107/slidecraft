@@ -605,7 +605,7 @@ function extractTextFromLeafNodes(node: PlateNode): string {
 
   // If the node itself has text, return it
   if (node.text) {
-    return node.text as string;
+    return decodeHtmlEntities(node.text as string);
   }
 
   // Only process immediate children that are text leaves
@@ -614,7 +614,7 @@ function extractTextFromLeafNodes(node: PlateNode): string {
       // Only process if it's a text node (has .text property) or inline element
       // Skip block-level children (they have their own type and will be processed recursively)
       if (child.text) {
-        text += child.text;
+        text += decodeHtmlEntities(child.text as string);
       } else if (!child.type || isInlineType(child.type as string)) {
         // Inline elements - extract text from them
         text += extractTextFromLeafNodes(child);
@@ -625,6 +625,25 @@ function extractTextFromLeafNodes(node: PlateNode): string {
   }
 
   return text;
+}
+
+/**
+ * Decode HTML entities in text content
+ */
+function decodeHtmlEntities(text: string): string {
+  const entities: Record<string, string> = {
+    "&amp;": "&",
+    "&lt;": "<",
+    "&gt;": ">",
+    "&quot;": '"',
+    "&#39;": "'",
+    "&apos;": "'",
+    "&nbsp;": " ",
+  };
+  return text.replace(
+    /&(?:amp|lt|gt|quot|apos|nbsp|#39);/g,
+    (match) => entities[match] ?? match,
+  );
 }
 
 /**

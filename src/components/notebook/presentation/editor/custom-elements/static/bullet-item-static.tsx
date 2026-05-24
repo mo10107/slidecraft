@@ -75,6 +75,7 @@ export function BulletItemStatic(props: SlateElementProps<TBulletItemElement>) {
           {/* Bullet marker - numbered, basic dot, or arrow */}
           <div
             className={bulletMarkerVariants({ bulletType })}
+            data-decor="true"
             style={{
               backgroundColor:
                 bulletType !== "arrow"
@@ -106,5 +107,3 @@ export function BulletItemStatic(props: SlateElementProps<TBulletItemElement>) {
     </SlateElement>
   );
 }
-
-

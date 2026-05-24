@@ -39,7 +39,7 @@ export const CycleItem = (
       <div
         data-bg-export="true"
         className={cn(
-          "h-full rounded-md border bg-(--presentation-card-background) p-6",
+          "h-full rounded-md border bg-(--presentation-card-background) text-(--presentation-card-text) p-6",
           // Use flex-row for multi-column (vertical) layout
           isSingleColumn && "flex flex-row items-start gap-4",
         )}

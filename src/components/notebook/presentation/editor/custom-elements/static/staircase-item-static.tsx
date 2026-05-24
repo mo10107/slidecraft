@@ -56,6 +56,7 @@ export function StairItemStatic(props: SlateElementProps) {
             color: "var(--presentation-background)",
           }}
           className="flex shrink-0 items-center justify-center rounded-md text-2xl font-bold"
+          data-decor="true"
         >
           {index + 1}
         </div>
@@ -71,5 +72,3 @@ export function StairItemStatic(props: SlateElementProps) {
     </div>
   );
 }
-
-

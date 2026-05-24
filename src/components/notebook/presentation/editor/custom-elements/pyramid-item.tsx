@@ -130,6 +130,7 @@ export const PyramidItem = (props: PlateElementProps<TPyramidItemElement>) => {
                 "var(--presentation-smart-layout)",
               color: "var(--presentation-background)",
             }}
+            data-decor="true"
           >
             {index + 1}
           </div>

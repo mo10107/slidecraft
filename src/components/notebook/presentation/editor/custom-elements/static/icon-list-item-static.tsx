@@ -26,10 +26,12 @@ export function IconListItemStatic(
             alignment === "center" && "justify-center",
           )}
         >
-          <PresentationIcon
-            icon={displayIcon}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border bg-transparent shadow-2xs"
-          />
+          <div className="shrink-0 pt-1" data-decor="true">
+            <PresentationIcon
+              icon={displayIcon}
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border bg-transparent shadow-2xs"
+            />
+          </div>
 
           <div className={cn("min-w-0 flex-1", getAlignmentClasses(alignment))}>
             {props.children}

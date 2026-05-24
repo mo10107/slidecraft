@@ -241,6 +241,7 @@ export function TimelineItem(props: PlateElementProps) {
             "--before-bg": string;
           }
         }
+        data-decor="true"
       >
         <span
           className={cn(

@@ -4,7 +4,7 @@
  */
 
 import { type PlateSlide } from "@/components/notebook/presentation/utils/parser";
-import PptxGenJS from "pptxgenjs/dist/pptxgen.bundle.js";
+import type PptxGenJS from "pptxgenjs";
 import {
   type BackgroundRectExportElement,
   type DecorExportElement,
@@ -26,7 +26,8 @@ export async function convertToPptx(
   scanResults: ScanResult[],
   slides: PlateSlide[],
 ): Promise<ArrayBuffer> {
-  const pptx = new PptxGenJS();
+  const { default: PptxGenJSLib } = await import("pptxgenjs");
+  const pptx = new PptxGenJSLib();
   pptx.layout = "LAYOUT_16x9";
 
   // Process each slide
@@ -611,8 +612,7 @@ function addImageElement(
 ): void {
   try {
     const imageSizing = {
-      type:
-        (element.sizing === "fill" ? "crop" : element.sizing) || "contain",
+      type: (element.sizing === "fill" ? "crop" : element.sizing) || "contain",
       w: position.w,
       h: position.h,
     } as const;

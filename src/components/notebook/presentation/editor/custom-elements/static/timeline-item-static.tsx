@@ -82,6 +82,7 @@ export function TimelineItemStatic(props: SlateElementProps) {
             "--before-bg": string;
           }
         }
+        data-decor="true"
       >
         <span
           className={cn(
@@ -105,5 +106,3 @@ export function TimelineItemStatic(props: SlateElementProps) {
     </div>
   );
 }
-
-

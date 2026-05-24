@@ -11,11 +11,13 @@ export type GeminiImageModelList =
 
 export type FalImageModelList = string; // kept for type compat, not used
 export type ImageModelList = GeminiImageModelList | string;
+export type GeminiImageAspectRatio = "1:1" | "3:4" | "4:3" | "9:16" | "16:9";
 
 async function generateGeminiImage(
   prompt: string,
   model: string,
   userId: string,
+  aspectRatio: GeminiImageAspectRatio = "16:9",
 ) {
   const geminiApiKey = env.GEMINI_API_KEY ?? env.GEMINI_KEY;
   const geminiConfig = requireOptionalIntegration({
@@ -51,7 +53,10 @@ async function generateGeminiImage(
       },
       body: JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { responseModalities: ["IMAGE", "TEXT"] },
+        generationConfig: {
+          responseModalities: ["IMAGE", "TEXT"],
+          imageConfig: { aspectRatio },
+        },
       }),
     },
   );
@@ -77,6 +82,18 @@ async function generateGeminiImage(
   const dataUrl = `data:${mimeType};base64,${imagePart.inlineData.data}`;
 
   try {
+    await db.user.upsert({
+      where: { id: userId },
+      update: { hasAccess: true },
+      create: {
+        id: userId,
+        email: "local-dev@example.com",
+        hasAccess: true,
+        interests: [],
+        name: "Local Dev",
+        role: "ADMIN",
+      },
+    });
     const image = await db.generatedImage.create({
       data: { url: dataUrl, prompt, userId },
     });
@@ -89,12 +106,13 @@ async function generateGeminiImage(
 export async function generateImageAction(
   prompt: string,
   model: ImageModelList = "gemini-3.1-flash-image-preview",
+  aspectRatio: GeminiImageAspectRatio = "16:9",
 ) {
   const session = await auth();
   const userId = session?.user?.id ?? "local-dev-user";
 
   try {
-    return await generateGeminiImage(prompt, model, userId);
+    return await generateGeminiImage(prompt, model, userId, aspectRatio);
   } catch (error) {
     console.error("Error generating image:", error);
     return {

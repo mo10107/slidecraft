@@ -126,6 +126,7 @@ export function extractPresentationStyles(
     textColor: getVar("--presentation-text", "#1F2937"),
     headingColor: getVar("--presentation-heading", "#111827"),
     cardBackground: getVar("--presentation-card-background", "#F3F4F6"),
+    cardTextColor: getVar("--presentation-card-text", "#1F2937"),
     smartLayoutColor: getVar("--presentation-smart-layout", "#3B82F6"),
 
     // Fonts

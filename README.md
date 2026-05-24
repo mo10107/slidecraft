@@ -112,7 +112,6 @@ docker run -p 3000:3000 \
   -e NEXTAUTH_SECRET="your-secret" \
   presentation-ai
 ```
-
 ### Docker Compose (recommended)
 
 ```yaml
